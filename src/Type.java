@@ -1,6 +1,16 @@
 public enum Type{
-    WORK,
-    PERSONAL;
+    WORK("Рабочая"),
+    PERSONAL("Личная");
+
+    String type;
+
+    Type (String type){
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
 }
 
 

@@ -1,79 +1,93 @@
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Task {
-    private static final AtomicInteger ID_GENERATOR = new AtomicInteger(1);
+    static int idGenerator = 0;
     private String title;
     private Type type;
-    private int id;
-    private LocalDate date;
+    final int id;
     private String description;
-    private String repeatability;
+    private LocalDate date;
+    private Repeatability repeatability;
+    private LocalDate nextDate;
 
-    public Task(String title, Type type, String description) throws IncorrectArgumentException{
-        id = ID_GENERATOR.getAndIncrement();
-        setTitle(title);
+    public Task(String title, Type type, String description, Repeatability repeatability) {
+        id = idGenerator++;
         this.title = title;
-        setType(type);
+        setTitle(title);
         this.type = type;
-        setRepeatability(repeatability);
+        setType(type);
         this.description = description;
         setDescription(description);
-        this.date = LocalDate.now();
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Type getType() {
-        return type;
+        this.repeatability = repeatability;
+        date = LocalDate.now();
+        nextDate();
     }
 
     public int getId() {
         return id;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public LocalDate getDate() {
         return date;
     }
 
-    public void setTitle(String title) throws IncorrectArgumentException{
-        if (title == null || title.isEmpty()) {
-            throw new IncorrectArgumentException("Пустое поле - Заголовок");
+    public Repeatability getRepeatability() {
+        return repeatability;
+    }
+
+    public LocalDate getNextDate() {
+        return nextDate;
+    }
+
+    public void setTitle(String title) throws IllegalArgumentException {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Заголовок не может быть пустым");
         }
         this.title = title;
     }
 
-    public void setDescription(String description) throws IncorrectArgumentException{
-        if (description == null || description.isEmpty()) {
-            throw new IncorrectArgumentException("Пустое поле - Описание");
-        }
-        this.description = description;
-    }
-
-    public void setRepeatability(String repeatability) throws IncorrectArgumentException{
-        if (repeatability == null || repeatability.isEmpty()) {
-            throw new IncorrectArgumentException("Пустое поле - Тип задачи");
-        }
-        this.repeatability = repeatability;
-    }
-
-    public void setType(Type type) throws IncorrectArgumentException{
+    public void setType(Type type)  throws IllegalArgumentException {
         if (type == null) {
-            throw new IncorrectArgumentException("Пустое поле - Тип задачи");
+            throw new IllegalArgumentException("Тип не может быть пустым");
         }
         this.type = type;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDescription(String description) throws IllegalArgumentException {
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Описание не может быть пустым");
+        }
+        this.description = description;
+    }
+
+    public void setRepeatability(Repeatability repeatability) throws IllegalArgumentException {
+        if (repeatability == null) {
+            throw new IllegalArgumentException("Повторность не может быть пустым");
+        }
+        this.repeatability = repeatability;
+    }
+
+    public void nextDate() {
+        switch (this.repeatability) {
+            case ONE_TIME:
+                nextDate = date;
+                break;
+            case DAILY:
+                nextDate = date.plusDays(1);
+                break;
+            case WEEKLY:
+                nextDate = date.plusWeeks(1);
+                break;
+            case MONTHLY:
+                nextDate = date.plusMonths(1);
+                break;
+            case YEARLY:
+                nextDate = date.plusYears(1);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -95,12 +109,10 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", type=" + type +
-                ", id=" + id +
-                ", dateTime=" + date +
-                ", description='" + description + '\'' +
-                '}';
+        return "Задача №: " + id + "\n" +
+                "Заголовок: " + title + "\n" +
+                "Тип задачи: " + type.getType() + "\n" +
+                "Дата задачи: " + date + "\n" +
+                "Повторяемость: " + repeatability.getRepeatability() + "\n";
     }
 }
