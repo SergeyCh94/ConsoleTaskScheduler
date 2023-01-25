@@ -1,3 +1,5 @@
+package Enums;
+
 public enum Repeatability {
     ONE_TIME("Однократная"), DAILY("Ежедневная"), WEEKLY("Еженедельная"), MONTHLY("Ежемесячная"), YEARLY("Ежегодная");
 

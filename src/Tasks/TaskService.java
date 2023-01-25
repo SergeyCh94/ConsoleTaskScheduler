@@ -1,6 +1,13 @@
+package Tasks;
+
+import Exeptions.TaskNotFoundException;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TaskService {
     private Map<Integer, Task> taskService = new HashMap<>();
@@ -17,21 +24,14 @@ public class TaskService {
                 delete = true;
                 break;
             } else {
-                throw new TaskNotFoundException("Task not found");
+                throw new TaskNotFoundException("Tasks.Task not found");
             }
         }
         return delete;
     }
 
-    public void getAllByDate(LocalDate inputData) throws TaskNotFoundException {
-        System.out.println("input data: " + inputData);
-        for (Map.Entry<Integer, Task> entry : taskService.entrySet()) {
-            if(entry.getValue().getNextDate().isEqual(inputData)) {
-                System.out.println(entry.getValue());
-            } else {
-                throw new TaskNotFoundException("Task not found");
-            }
-        }
+    public Collection<Task> getAllByDate(LocalDate date) {
+        return taskService.values().stream().filter(e -> e.appearsIn(LocalDate.now())).collect(Collectors.toList());
     }
 
     public void printAllTasks() {

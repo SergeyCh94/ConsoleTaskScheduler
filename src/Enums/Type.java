@@ -1,3 +1,5 @@
+package Enums;
+
 public enum Type{
     WORK("Рабочая"),
     PERSONAL("Личная");

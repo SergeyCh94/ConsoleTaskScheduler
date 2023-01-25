@@ -1,5 +1,12 @@
 
+import Enums.Repeatability;
+import Enums.Type;
+import Exeptions.TaskNotFoundException;
+import Tasks.Task;
+import Tasks.TaskService;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 
@@ -14,6 +21,7 @@ public class Main {
     }
     public static void main(String[] args) throws IllegalArgumentException {
         try(Scanner scanner = new Scanner(System.in)) {
+            label:
             while (true) {
                 printMenu();
                 System.out.println("Выберите пункт меню: ");
@@ -47,7 +55,7 @@ public class Main {
                 }
             }
         } catch (TaskNotFoundException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
@@ -56,6 +64,8 @@ public class Main {
         String title = scanner.next();
         System.out.println("Введите описание: ");
         String description = scanner.next();
+        System.out.println("Введите дату: ");
+        LocalDateTime date = LocalDateTime.parse(scanner.next());
         int repeatability;
 
         System.out.println("Введите повторность: 1 - однократная,2 - ежедневная,3 - еженедельная,4 - ежемесячная,5- ежегодная");
@@ -64,23 +74,48 @@ public class Main {
         while (repeatability > 0 && repeatability < 6);
         switch (repeatability) {
             case 1:
-                Task task1 = new Task(title, Type.PERSONAL, description, Repeatability.ONE_TIME);
+                Task task1 = new Task(title, Type.PERSONAL, description, date, Repeatability.ONE_TIME) {
+                    @Override
+                    public boolean appearsIn(LocalDate dateTime) {
+                        return true;
+                    }
+                };
                 taskService.addTask(task1.getId(), task1);
                 break;
             case 2:
-                Task task2 = new Task(title, Type.PERSONAL, description, Repeatability.DAILY);
+                Task task2 = new Task(title, Type.PERSONAL, description, date, Repeatability.DAILY) {
+                    @Override
+                    public boolean appearsIn(LocalDate dateTime) {
+                        return true;
+                    }
+                };
                 taskService.addTask(task2.getId(), task2);
                 break;
             case 3:
-                Task task3 = new Task(title, Type.PERSONAL, description, Repeatability.WEEKLY);
+                Task task3 = new Task(title, Type.PERSONAL, description, date, Repeatability.WEEKLY) {
+                    @Override
+                    public boolean appearsIn(LocalDate dateTime) {
+                        return true;
+                    }
+                };
                 taskService.addTask(task3.getId(), task3);
                 break;
             case 4:
-                Task task4 = new Task(title, Type.PERSONAL, description, Repeatability.MONTHLY);
+                Task task4 = new Task(title, Type.PERSONAL, description, date, Repeatability.MONTHLY) {
+                    @Override
+                    public boolean appearsIn(LocalDate dateTime) {
+                        return true;
+                    }
+                };
                 taskService.addTask(task4.getId(), task4);
                 break;
             case 5:
-                Task task5 = new Task(title, Type.PERSONAL, description, Repeatability.YEARLY);
+                Task task5 = new Task(title, Type.PERSONAL, description, date, Repeatability.YEARLY) {
+                    @Override
+                    public boolean appearsIn(LocalDate dateTime) {
+                        return true;
+                    }
+                };
                 taskService.addTask(task5.getId(), task5);
                 break;
             default:

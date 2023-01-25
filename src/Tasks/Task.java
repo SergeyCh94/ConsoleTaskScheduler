@@ -1,44 +1,43 @@
+package Tasks;
+
+import Enums.Repeatability;
+import Enums.Type;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
+public abstract class Task {
     static int idGenerator = 0;
     private String title;
     private Type type;
     final int id;
     private String description;
-    private LocalDate date;
+    private LocalDateTime dateTime;
     private Repeatability repeatability;
-    private LocalDate nextDate;
 
-    public Task(String title, Type type, String description, Repeatability repeatability) {
-        id = idGenerator++;
+    public Task(String title, Type type, String description, LocalDateTime dateTime, Repeatability repeatability) {
+        idGenerator++;
+        this.id = idGenerator;
         this.title = title;
-        setTitle(title);
         this.type = type;
-        setType(type);
         this.description = description;
-        setDescription(description);
+        this.dateTime = dateTime;
         this.repeatability = repeatability;
-        date = LocalDate.now();
-        nextDate();
     }
 
     public int getId() {
         return id;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getDate() {
+        return dateTime;
     }
 
     public Repeatability getRepeatability() {
         return repeatability;
     }
 
-    public LocalDate getNextDate() {
-        return nextDate;
-    }
 
     public void setTitle(String title) throws IllegalArgumentException {
         if (title == null || title.trim().isEmpty()) {
@@ -68,27 +67,7 @@ public class Task {
         this.repeatability = repeatability;
     }
 
-    public void nextDate() {
-        switch (this.repeatability) {
-            case ONE_TIME:
-                nextDate = date;
-                break;
-            case DAILY:
-                nextDate = date.plusDays(1);
-                break;
-            case WEEKLY:
-                nextDate = date.plusWeeks(1);
-                break;
-            case MONTHLY:
-                nextDate = date.plusMonths(1);
-                break;
-            case YEARLY:
-                nextDate = date.plusYears(1);
-                break;
-            default:
-                break;
-        }
-    }
+    public abstract boolean appearsIn(LocalDate dateTime);
 
     @Override
     public boolean equals(Object o) {
@@ -97,14 +76,14 @@ public class Task {
         Task task = (Task) o;
         return id == task.id && Objects.equals(title, task.title)
                 && type == task.type
-                && Objects.equals(date, task.date)
+                && Objects.equals(dateTime, task.dateTime)
                 && Objects.equals(description, task.description)
                 && Objects.equals(repeatability, task.repeatability);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, type, id, date, description, repeatability);
+        return Objects.hash(title, type, id, dateTime, description, repeatability);
     }
 
     @Override
@@ -112,7 +91,7 @@ public class Task {
         return "Задача №: " + id + "\n" +
                 "Заголовок: " + title + "\n" +
                 "Тип задачи: " + type.getType() + "\n" +
-                "Дата задачи: " + date + "\n" +
+                "Дата задачи: " + dateTime + "\n" +
                 "Повторяемость: " + repeatability.getRepeatability() + "\n";
     }
 }
