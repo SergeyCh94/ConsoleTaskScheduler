@@ -1,7 +1,8 @@
-package Tasks;
+package tasks;
 
-import Enums.Repeatability;
-import Enums.Type;
+import enums.Repeatability;
+import enums.Type;
+import exeptions.IncorrectArgumentException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,14 +17,14 @@ public abstract class Task {
     private LocalDateTime dateTime;
     private Repeatability repeatability;
 
-    public Task(String title, Type type, String description, LocalDateTime dateTime, Repeatability repeatability) {
+    public Task(String title, Type type, String description, LocalDateTime dateTime, Repeatability repeatability) throws IncorrectArgumentException {
         idGenerator++;
         this.id = idGenerator;
-        this.title = title;
-        this.type = type;
-        this.description = description;
+        setTitle(title);
+        setType(type);
+        setDescription(description);
         this.dateTime = dateTime;
-        this.repeatability = repeatability;
+        setRepeatability(repeatability);
     }
 
     public int getId() {
@@ -39,30 +40,30 @@ public abstract class Task {
     }
 
 
-    public void setTitle(String title) throws IllegalArgumentException {
+    public void setTitle(String title) throws IncorrectArgumentException {
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Заголовок не может быть пустым");
+            throw new IncorrectArgumentException("Заголовок не может быть пустым");
         }
         this.title = title;
     }
 
-    public void setType(Type type)  throws IllegalArgumentException {
+    public void setType(Type type)  throws IncorrectArgumentException {
         if (type == null) {
-            throw new IllegalArgumentException("Тип не может быть пустым");
+            throw new IncorrectArgumentException("Тип не может быть пустым");
         }
         this.type = type;
     }
 
-    public void setDescription(String description) throws IllegalArgumentException {
+    public void setDescription(String description) throws IncorrectArgumentException {
         if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Описание не может быть пустым");
+            throw new IncorrectArgumentException("Описание не может быть пустым");
         }
         this.description = description;
     }
 
-    public void setRepeatability(Repeatability repeatability) throws IllegalArgumentException {
+    public void setRepeatability(Repeatability repeatability) throws IncorrectArgumentException {
         if (repeatability == null) {
-            throw new IllegalArgumentException("Повторность не может быть пустым");
+            throw new IncorrectArgumentException("Повторность не может быть пустым");
         }
         this.repeatability = repeatability;
     }

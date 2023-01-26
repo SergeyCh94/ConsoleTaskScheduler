@@ -1,9 +1,8 @@
-package Tasks;
+package tasks;
 
-import Exeptions.TaskNotFoundException;
+import exeptions.TaskNotFoundException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +11,8 @@ import java.util.stream.Collectors;
 public class TaskService {
     private Map<Integer, Task> taskService = new HashMap<>();
 
-    public void addTask(int id, Task task) {
-        taskService.put(id, task);
+    public void addTask(Task task) {
+        taskService.put(task.getId(), task);
     }
 
     public boolean removeTask(int id) throws TaskNotFoundException {
@@ -30,8 +29,9 @@ public class TaskService {
         return delete;
     }
 
-    public Collection<Task> getAllByDate(LocalDate date) {
-        return taskService.values().stream().filter(e -> e.appearsIn(LocalDate.now())).collect(Collectors.toList());
+    public Collection<Task> getAllByDate(LocalDate localDate) {
+        return taskService.values().stream()
+                .filter(e ->e.appearsIn(localDate)).collect(Collectors.toList());
     }
 
     public void printAllTasks() {

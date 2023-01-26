@@ -1,4 +1,4 @@
-package Exeptions;
+package exeptions;
 
 public class IncorrectArgumentException extends Exception{
     public IncorrectArgumentException(String message) {

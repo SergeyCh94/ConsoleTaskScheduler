@@ -1,126 +1,36 @@
-
-import Enums.Repeatability;
-import Enums.Type;
-import Exeptions.TaskNotFoundException;
-import Tasks.Task;
-import Tasks.TaskService;
+import enums.Repeatability;
+import enums.Type;
+import exeptions.IncorrectArgumentException;
+import exeptions.TaskNotFoundException;
+import tasks.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Scanner;
-
 
 public class Main {
-    static TaskService taskService = new TaskService();
+    public static void main(String[] args) throws IncorrectArgumentException, TaskNotFoundException {
+        OneTimeTask oneTimeTask = new OneTimeTask("OneTimeTask", Type.PERSONAL, "Task one time",
+                LocalDateTime.of(2023,12,12,10,00), Repeatability.ONE_TIME);
+        DailyTask dailyTask = new DailyTask("DailyTask", Type.PERSONAL, "Task daily",
+                LocalDateTime.of(2024,12,12,10,00), Repeatability.DAILY);
+        WeeklyTask weeklyTask = new WeeklyTask("WeeklyTask", Type.PERSONAL, "Task weekly",
+                LocalDateTime.of(2025,12,12,10,00), Repeatability.WEEKLY);
+        MonthlyTask monthlyTask = new MonthlyTask("MonthlyTask", Type.PERSONAL, "Task monthly",
+                LocalDateTime.of(2026,12,12,10,00), Repeatability.MONTHLY);
+        YearlyTask yearlyTask = new YearlyTask("YearlyTask", Type.PERSONAL, "Task yearly",
+                LocalDateTime.of(2027,12,12,10,00), Repeatability.YEARLY);
 
-    private static void printMenu() {
-        System.out.println("1. Добавить задачу \n" +
-                "2. Получить задачу на день \n" +
-                "3. Удалить задачу по ID \n" +
-                "4. Вывод всех задач \n");
-    }
-    public static void main(String[] args) throws IllegalArgumentException {
-        try(Scanner scanner = new Scanner(System.in)) {
-            label:
-            while (true) {
-                printMenu();
-                System.out.println("Выберите пункт меню: ");
-                if (scanner.hasNextInt()) {
-                    int menu = scanner.nextInt();
-                    switch (menu) {
-                        case 1:
-                            createTask(scanner);
-                            break;
-                        case 2:
-                            System.out.println("Введите ID задачи: ");
-                            int remove = scanner.nextInt();
-                            if (taskService.removeTask(remove)){
-                                System.out.println("Задача удалена");
-                            } else {
-                                System.out.println("Задача не найдена");
-                            }
-                            break;
-                        case 3:
-                            System.out.println("Введите дату: ");
-                            String date = scanner.next();
-                            LocalDate localDate = LocalDate.parse(date);
-                            taskService.getAllByDate(localDate);
-                            break;
-                        case 4:
-                            taskService.printAllTasks();
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Некорректный пункт меню");
-                    }
-                }
-            }
-        } catch (TaskNotFoundException e) {
-
+        TaskService taskService = new TaskService();
+        taskService.addTask(oneTimeTask);
+        taskService.addTask(dailyTask);
+        taskService.addTask(weeklyTask);
+        taskService.addTask(monthlyTask);
+        taskService.addTask(yearlyTask);
+        taskService.printAllTasks();
+        System.out.println("________________________________________");
+        taskService.removeTask(oneTimeTask.getId());
+        taskService.printAllTasks();
+        System.out.println("________________________________________");
+        System.out.println(taskService.getAllByDate(LocalDate.of(2024,12,12)));
         }
     }
-
-    private static void createTask(Scanner scanner) {
-        System.out.println("Введите заголовок: ");
-        String title = scanner.next();
-        System.out.println("Введите описание: ");
-        String description = scanner.next();
-        System.out.println("Введите дату: ");
-        LocalDateTime date = LocalDateTime.parse(scanner.next());
-        int repeatability;
-
-        System.out.println("Введите повторность: 1 - однократная,2 - ежедневная,3 - еженедельная,4 - ежемесячная,5- ежегодная");
-        repeatability = scanner.nextInt();
-
-        while (repeatability > 0 && repeatability < 6);
-        switch (repeatability) {
-            case 1:
-                Task task1 = new Task(title, Type.PERSONAL, description, date, Repeatability.ONE_TIME) {
-                    @Override
-                    public boolean appearsIn(LocalDate dateTime) {
-                        return true;
-                    }
-                };
-                taskService.addTask(task1.getId(), task1);
-                break;
-            case 2:
-                Task task2 = new Task(title, Type.PERSONAL, description, date, Repeatability.DAILY) {
-                    @Override
-                    public boolean appearsIn(LocalDate dateTime) {
-                        return true;
-                    }
-                };
-                taskService.addTask(task2.getId(), task2);
-                break;
-            case 3:
-                Task task3 = new Task(title, Type.PERSONAL, description, date, Repeatability.WEEKLY) {
-                    @Override
-                    public boolean appearsIn(LocalDate dateTime) {
-                        return true;
-                    }
-                };
-                taskService.addTask(task3.getId(), task3);
-                break;
-            case 4:
-                Task task4 = new Task(title, Type.PERSONAL, description, date, Repeatability.MONTHLY) {
-                    @Override
-                    public boolean appearsIn(LocalDate dateTime) {
-                        return true;
-                    }
-                };
-                taskService.addTask(task4.getId(), task4);
-                break;
-            case 5:
-                Task task5 = new Task(title, Type.PERSONAL, description, date, Repeatability.YEARLY) {
-                    @Override
-                    public boolean appearsIn(LocalDate dateTime) {
-                        return true;
-                    }
-                };
-                taskService.addTask(task5.getId(), task5);
-                break;
-            default:
-                System.out.println("Неверная повторность");
-                break;
-        }
-    }
-}

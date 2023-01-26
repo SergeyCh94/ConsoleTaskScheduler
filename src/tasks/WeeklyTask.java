@@ -1,13 +1,14 @@
-package Tasks;
+package tasks;
 
-import Enums.Repeatability;
-import Enums.Type;
+import enums.Repeatability;
+import enums.Type;
+import exeptions.IncorrectArgumentException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class WeeklyTask extends Task{
-    public WeeklyTask(String title, Type type, String description, LocalDateTime dateTime, Repeatability repeatability) {
+    public WeeklyTask(String title, Type type, String description, LocalDateTime dateTime, Repeatability repeatability) throws IncorrectArgumentException {
         super(title, type, description, dateTime, repeatability);
     }
 
