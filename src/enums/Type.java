@@ -1,6 +1,6 @@
 package enums;
 
-public enum Type{
+public enum Type implements java.lang.reflect.Type {
     WORK("Рабочая"),
     PERSONAL("Личная");
 
@@ -12,6 +12,11 @@ public enum Type{
 
     public String getType() {
         return type;
+    }
+
+    @Override
+    public String getTypeName() {
+        return java.lang.reflect.Type.super.getTypeName();
     }
 }
 

@@ -1,9 +1,9 @@
 package tasks;
 
 import enums.Repeatability;
-import enums.Type;
 import exeptions.IncorrectArgumentException;
 
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,6 +14,6 @@ public class OneTimeTask extends Task{
 
     @Override
     public boolean appearsIn(LocalDate localDate) {
-        return localDate.isEqual(getDate().toLocalDate());
+        return localDate.isEqual(getDateTime().toLocalDate());
     }
 }
