@@ -26,11 +26,17 @@ public class Main {
         taskService.addTask(weeklyTask);
         taskService.addTask(monthlyTask);
         taskService.addTask(yearlyTask);
+
+        System.out.println("All tasks: ");
         taskService.printAllTasks();
         System.out.println("________________________________________");
+
         taskService.removeTask(oneTimeTask.getId());
+        System.out.println("Tasks after removing oneTimeTask: ");
         taskService.printAllTasks();
         System.out.println("________________________________________");
+
+        System.out.println("Tasks on date " + LocalDate.of(2024,12,12) + ": ");
         System.out.println(taskService.getAllByDate(LocalDate.of(2024,12,12)));
-        }
     }
+}

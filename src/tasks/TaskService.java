@@ -1,7 +1,6 @@
 package tasks;
 
 import exeptions.TaskNotFoundException;
-
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,22 +15,17 @@ public class TaskService {
     }
 
     public boolean removeTask(int id) throws TaskNotFoundException {
-        boolean delete = false;
-        for (Map.Entry<Integer, Task> entry : taskService.entrySet()) {
-            if(entry.getValue().getId() == id) {
-                taskService.remove(id);
-                delete = true;
-                break;
-            } else {
-                throw new TaskNotFoundException("Tasks.Task not found");
-            }
+        try {
+            taskService.remove(id);
+            return true;
+        } catch (Exception e) {
+            throw new TaskNotFoundException("Task with id '" + id + "' not found");
         }
-        return delete;
     }
 
     public Collection<Task> getAllByDate(LocalDate localDate) {
         return taskService.values().stream()
-                .filter(e ->e.appearsIn(localDate)).collect(Collectors.toList());
+                .filter(e -> e.appearsIn(localDate)).collect(Collectors.toList());
     }
 
     public void printAllTasks() {
@@ -40,3 +34,4 @@ public class TaskService {
         }
     }
 }
+
